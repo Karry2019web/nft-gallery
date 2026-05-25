@@ -1,4 +1,3 @@
-import unionBy from 'lodash/unionBy'
 import type { NFT, NFTMetadata } from '@/types'
 import { sanitizeIpfsUrl } from '@/utils/ipfs'
 import type { BaseNFTMeta } from '@/components/base/types'
@@ -58,10 +57,23 @@ export const isTokenEntity = (
 function getAttributes(nft, metadata) {
   const hasMetadataAttributes
     = metadata.attributes && metadata.attributes.length > 0
-  const attr = unionBy(
-    nft?.attributes?.concat(...(nft?.meta?.attributes || [])),
-    item => item.trait_type || item.key,
-  )
+
+  // Merge attributes: on-chain (extrinsic) attributes overwrite metadata attributes
+  // when they share the same trait_type or key
+  const toKeyedObject = (attrs) => {
+    if (!attrs) { return {} }
+    const obj = {}
+    for (const attr of attrs) {
+      obj[attr.trait_type || attr.key] = attr
+    }
+    return obj
+  }
+
+  const metadataAttrs = nft?.meta?.attributes || []
+  const onChainAttrs = nft?.attributes || []
+  const merged = { ...toKeyedObject(metadataAttrs), ...toKeyedObject(onChainAttrs) }
+  const attr = Object.values(merged)
+
   const hasEmptyNftAttributes = attr.length === 0
 
   return hasMetadataAttributes && hasEmptyNftAttributes
