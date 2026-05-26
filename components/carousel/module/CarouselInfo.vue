@@ -1,7 +1,6 @@
 <template>
   <div
     class="carousel-info whitespace-nowrap overflow-hidden text-ellipsis p-4 flex flex-col"
-    :class="{ 'carousel-info__mobile': $device.isMobile }"
   >
     <div
       :title="item.name"
@@ -18,8 +17,8 @@
     </div>
 
     <div
-      v-if="item?.collectionId && !$device.isMobile"
-      class="min-h-[1.5rem]"
+      v-if="item?.collectionId"
+      class="hidden lg:block min-h-[1.5rem]"
     >
       <CollectionDetailsPopover :nft="item">
         <template #content>
@@ -61,8 +60,7 @@
         >- {{ $t('spotlight.sold') }}</span>
       </div>
       <p
-        v-if="!$device.isMobile"
-        class="text-xs text-k-grey capitalize"
+        class="hidden lg:block text-xs text-k-grey capitalize"
       >
         {{ chainName }}
       </p>
