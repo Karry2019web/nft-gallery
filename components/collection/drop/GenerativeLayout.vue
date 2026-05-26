@@ -38,7 +38,7 @@
           <hr class="hidden md:block mt-4 mb-0">
 
           <CollectionDropGenerativePreview
-            v-if="width < mdBreakpoint"
+            class="block md:hidden"
             @mint="emit('mint')"
             @generation:start="handleNftGeneration"
             @generation:end="handleNftGenerationEnd"
@@ -59,8 +59,7 @@
         </div>
 
         <div
-          v-if="width >= mdBreakpoint"
-          class="flex-1 flex py-3 px-4 justify-end mt-[-213px]"
+          class="hidden md:block flex-1 flex py-3 px-4 justify-end mt-[-213px]"
         >
           <CollectionDropGenerativePreview
             @mint="emit('mint')"
@@ -96,18 +95,14 @@
 </template>
 
 <script setup lang="ts">
-import { useWindowSize } from '@vueuse/core'
 import useCursorDropEvents from '@/composables/party/useCursorDropEvents'
 import { DropEventType } from '@/composables/party/types'
 import { fetchOdaCollectionOwners } from '@/services/oda'
-
-const mdBreakpoint = 768
 
 const emit = defineEmits(['mint'])
 
 const { drop } = storeToRefs(useDropStore())
 const { previewItem, userMintsCount } = storeToRefs(useDropStore())
-const { width } = useWindowSize()
 
 const { emitEvent, completeLastEvent } = useCursorDropEvents()
 
