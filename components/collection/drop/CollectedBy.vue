@@ -1,6 +1,6 @@
 <template>
   <div
-    class="rounded-full h-[62px] md:w-auto border border-k-shade inline-flex items-center justify-between px-3"
+    class="rounded-full h-[62px] md:w-auto min-w-[120px] border border-k-shade inline-flex items-center justify-between px-3"
     :class="{ 'h-full border-none': size === 'small' }"
     data-testid="drop-collected-by-container"
   >
